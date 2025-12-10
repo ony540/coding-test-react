@@ -46,12 +46,12 @@ export interface PaginatedResult<T> {
 
 // 문제 1: 활성 사용자 필터링
 export const filterActiveUsers = (users: User[]): User[] => {
-  return [];
+  return users.filter(user => user.isActive);
 };
 
 // 문제 2: ID로 사용자 찾기
 export const findUserById = (users: User[], id: number): User | undefined => {
-  return undefined;
+  return users.find(user => user.id === id);
 };
 
 // 문제 3: 사용자 이름을 ID 맵으로 변환
@@ -61,17 +61,31 @@ export const createUserMap = (users: User[]): { [id: number]: string } => {
 
 // 문제 4: 키를 기준으로 배열 정렬
 export const sortArrayByKey = <T>(array: T[], key: keyof T, order: 'asc' | 'desc'): T[] => {
-  return [];
+  return []
+// return array.sort((a, b)=> { 
+  // if(!a?.[key] || !b?.[key]) return 0; 
+  // const orderFunc = order === 'asc' ? (a[key] - b.[key]) :( b.[key] - a.[key]); 
+  // return orderFunc 
+  // }); };
 };
 
 // 문제 5: 페이지네이션 구현
 export const paginate = <T>(array: T[], page: number, pageSize: number): PaginatedResult<T> => {
-  return { items: [], totalItems: 0, totalPages: 0, currentPage: page };
+  
+  const totalItems = array.length;
+  const totalPages = Math.ceil(totalItems / pageSize);
+  // 1이 첫번째 페이지
+  const startNum = (page-1) * pageSize;
+  const items  =  array.slice(startNum, startNum + pageSize  );
+  return { items, totalItems, totalPages, currentPage: page };
 };
 
 // 문제 6: 계산된 속성 추가 (age 가 20 이상을 adult 로 간주합니다)
 export const addIsAdultProperty = (users: User[]): (User & { isAdult: boolean })[] => {
-  return [];
+  const result = users.map(user=>{
+    return {...user, isAdult: user.age >= 20}
+  })
+  return result;
 };
 
 // 문제 7: 카테고리별 상품 총액 계산
